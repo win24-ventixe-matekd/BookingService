@@ -19,20 +19,12 @@ public class BookingEntity
     public decimal? PackagePrice { get; set; }
     public string? Currency { get; set; }
     public int Amount { get; set; }
-}
 
-public class BookingUser
-{
-    [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-    public string FirstName { get; set; } = null!;
-    public string LastName { get; set; } = null!;
-    public string Email { get; set; } = null!;
-}
+    [ForeignKey("User")]
+    public string UserId { get; set; } = null!;
+    public BookingUserEntity User { get; set; } = null!;
 
-public class BookingAddress
-{
-    [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-
+    [ForeignKey("Address")]
+    public string AddressId { get; set; } = null!;
+    public BookingAddressEntity Address { get; set;} = null!;
 }
