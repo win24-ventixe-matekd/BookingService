@@ -1,4 +1,6 @@
 using Data.Contexts;
+using Data.Interfaces;
+using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlDatabase")));
+
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingAddressRepository, BookingAddressRepository>();
+builder.Services.AddScoped<IBookingUserRepository, BookingUserRepository>();
 
 var app = builder.Build();
 
