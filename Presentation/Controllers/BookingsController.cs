@@ -1,17 +1,17 @@
 ﻿using Data.Entities;
+using Data.Interfaces;
 using Data.Models;
-using Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BookingsController(BookingRepository bookingRepository, BookingAddressRepository bookingAddressRepository, BookingUserRepository bookingUserRepository) : ControllerBase
+public class BookingsController(IBookingRepository bookingRepository, IBookingAddressRepository bookingAddressRepository, IBookingUserRepository bookingUserRepository) : ControllerBase
 {
-    private readonly BookingRepository _bookingRepository = bookingRepository;
-    private readonly BookingAddressRepository _bookingAddressRepository = bookingAddressRepository;
-    private readonly BookingUserRepository _bookingUserRepository = bookingUserRepository;
+    private readonly IBookingRepository _bookingRepository = bookingRepository;
+    private readonly IBookingAddressRepository _bookingAddressRepository = bookingAddressRepository;
+    private readonly IBookingUserRepository _bookingUserRepository = bookingUserRepository;
 
     [HttpPost]
     public async Task<IActionResult> CreateBooking(CreateBookingModel model)
@@ -50,12 +50,18 @@ public class BookingsController(BookingRepository bookingRepository, BookingAddr
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        return Ok();
+        var bookings = await _bookingRepository.GetAllAsync();
+        return bookings.Success
+            ? Ok(bookings)
+            : NotFound();
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Get()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(string id)
     {
-        return Ok();
+        var booking = await _bookingRepository.GetAsync(x => x.Id == id, includes: x => x.User);
+        return booking.Success
+            ? Ok(booking)
+            : NotFound();
     }
 }
