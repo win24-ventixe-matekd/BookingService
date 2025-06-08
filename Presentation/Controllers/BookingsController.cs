@@ -50,7 +50,7 @@ public class BookingsController(IBookingRepository bookingRepository, IBookingAd
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var bookings = await _bookingRepository.GetAllAsync();
+        var bookings = await _bookingRepository.GetAllAsync(includes: x => x.User);
         return bookings.Success
             ? Ok(bookings)
             : NotFound();
