@@ -25,7 +25,7 @@ public class BookingsController(IBookingRepository bookingRepository, IBookingAd
             return BadRequest(ModelState);
 
         var userResult = await _bookingUserRepository.AddAsync(
-            new BookingUserEntity { FirstName = model.FirstName, LastName = model.FirstName, Email = model.Email });
+            new BookingUserEntity { FirstName = model.FirstName, LastName = model.LastName, Email = model.Email });
         if (!userResult.Success)
             return BadRequest(ModelState);
 
